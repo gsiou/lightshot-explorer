@@ -75,6 +75,7 @@ func image(res http.ResponseWriter, req *http.Request) {
 	data["next"] = increment(id)
 	data["prev"] = decrement(id)
 	res.Header().Set("Content-Type", "application/json")
+	res.Header().Set("Access-Control-Allow-Origin", "*")
 	res.WriteHeader(http.StatusCreated)
 	json.NewEncoder(res).Encode(data)
 }
