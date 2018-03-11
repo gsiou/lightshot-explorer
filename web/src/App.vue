@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Main img='iofcli'/>
+    <Main :img="$route.params.id"/>
   </div>
 </template>
 

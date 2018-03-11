@@ -3,8 +3,8 @@
     <h1 v-if="loading">Loading...</h1>
     <img :src="image"/>
     <br/>
-    <button v-on:click="getPrev">Prev</button>
-    <button v-on:click="getNext">Next</button>
+    <button :disabled="this.loading" v-on:click="getPrev">Prev</button>
+    <button :disabled="this.loading" v-on:click="getNext">Next</button>
   </div>
 </template>
 
@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     getImage(image) {
+      this.$router.push({ path: '/' + image })
       this.loading = true
       window.fetch('http://localhost:12345/image/' + image)
       .then(res => res.json())
