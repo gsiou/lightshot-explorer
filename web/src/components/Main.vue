@@ -1,10 +1,12 @@
 <template>
   <div>
-    <h1 v-if="loading">Loading...</h1>
-    <img :src="image"/>
-    <br/>
-    <button :disabled="this.loading" v-on:click="getPrev">Prev</button>
-    <button :disabled="this.loading" v-on:click="getNext">Next</button>
+    <div v-if="img">
+      <h1 v-if="loading">Loading...</h1>
+      <img v-if="!loading" :src="image"/>
+      <br/>
+      <button class="pure-button" :disabled="this.loading" v-on:click="getPrev">Prev</button>
+      <button class="pure-button pure-button-primary" :disabled="this.loading" v-on:click="getNext">Next</button>
+    </div>
   </div>
 </template>
 
@@ -23,7 +25,9 @@ export default {
     }
   },
   mounted () {
-    this.getImage(this.img)
+    if (this.img) {
+      this.getImage(this.img)
+    }
   },
   methods: {
     getImage(image) {
@@ -50,4 +54,8 @@ export default {
 </script>
 
 <style scoped>
+img {
+  max-height: 80vh;
+  width: 100%;
+}
 </style>
