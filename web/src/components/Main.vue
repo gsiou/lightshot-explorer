@@ -7,6 +7,9 @@
       <button class="pure-button" :disabled="this.loading" v-on:click="getPrev">Prev</button>
       <button class="pure-button pure-button-primary" :disabled="this.loading" v-on:click="getNext">Next</button>
     </div>
+    <div v-else>
+      <p>Load an image to get started</p>
+    </div>
   </div>
 </template>
 
