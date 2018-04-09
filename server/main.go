@@ -2,22 +2,23 @@ package main
 
 import (
 	"encoding/json"
-  "os"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
+
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
 )
 
 type Config struct {
-  ConsumerKey string
-  ConsumerSecret string
-  Token string
-  TokenSecret string
+	ConsumerKey    string
+	ConsumerSecret string
+	Token          string
+	TokenSecret    string
 }
 
 func increment(alphanum string) string {
@@ -94,9 +95,9 @@ func getUrls(tweet twitter.Tweet) []string {
 	result := make([]string, 0, 10)
 	for _, url := range tweet.Entities.Urls {
 		if strings.HasPrefix(url.ExpandedURL, "http://prntscr.com") ||
-		   strings.HasPrefix(url.ExpandedURL, "https://prntscr.com") ||
-		   strings.HasPrefix(url.ExpandedURL, "http://prnt.sc") ||
-		   strings.HasPrefix(url.ExpandedURL, "https://prnt.sc") {
+			strings.HasPrefix(url.ExpandedURL, "https://prntscr.com") ||
+			strings.HasPrefix(url.ExpandedURL, "http://prnt.sc") ||
+			strings.HasPrefix(url.ExpandedURL, "https://prnt.sc") {
 			result = append(result, url.ExpandedURL)
 		}
 	}
@@ -104,14 +105,14 @@ func getUrls(tweet twitter.Tweet) []string {
 }
 
 func getRecent() string {
-  configfile, _ := os.Open("config.json")
-  defer configfile.Close()
-  decoder := json.NewDecoder(configfile)
-  creds := Config{}
-  decoder.Decode(&creds)
-  fmt.Println(creds)
-  config := oauth1.NewConfig(creds.ConsumerKey, creds.ConsumerSecret)
-  token := oauth1.NewToken(creds.Token, creds.TokenSecret)
+	configfile, _ := os.Open("config.json")
+	defer configfile.Close()
+	decoder := json.NewDecoder(configfile)
+	creds := Config{}
+	decoder.Decode(&creds)
+	fmt.Println(creds)
+	config := oauth1.NewConfig(creds.ConsumerKey, creds.ConsumerSecret)
+	token := oauth1.NewToken(creds.Token, creds.TokenSecret)
 	httpClient := config.Client(oauth1.NoContext, token)
 
 	client := twitter.NewClient(httpClient)
@@ -121,23 +122,23 @@ func getRecent() string {
 		Count: 100,
 	})
 
-  // Try and find a recent link
-  link := ""
-  for _, tweet := range search.Statuses {
-    urls := getUrls(tweet)
-    if len(urls) > 0 {
-      link = urls[0]
-      break
-    }
-  }
+	// Try and find a recent link
+	link := ""
+	for _, tweet := range search.Statuses {
+		urls := getUrls(tweet)
+		if len(urls) > 0 {
+			link = urls[0]
+			break
+		}
+	}
 
-  return link
+	return link
 }
 
 func recent(res http.ResponseWriter, req *http.Request) {
-  data := make(map[string]string)
-  data["recent"] = strings.Split(getRecent(), "/")[3]
-  res.Header().Set("Content-Type", "application/json")
+	data := make(map[string]string)
+	data["recent"] = strings.Split(getRecent(), "/")[3]
+	res.Header().Set("Content-Type", "application/json")
 	res.Header().Set("Access-Control-Allow-Origin", "*")
 	res.WriteHeader(http.StatusCreated)
 	json.NewEncoder(res).Encode(data)
@@ -145,6 +146,6 @@ func recent(res http.ResponseWriter, req *http.Request) {
 
 func main() {
 	http.HandleFunc("/image/", image)
-  http.HandleFunc("/recent/", recent)
+	http.HandleFunc("/recent", recent)
 	http.ListenAndServe(":12345", nil)
 }

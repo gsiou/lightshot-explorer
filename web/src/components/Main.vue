@@ -1,11 +1,12 @@
 <template>
   <div>
     <div v-if="img">
+      <button class="pure-button" :disabled="this.loading" v-on:click="getPrev">Prev</button>
+      <button class="pure-button" v-on:click="getRecent">Recent</button>
+      <button class="pure-button pure-button-primary" :disabled="this.loading" v-on:click="getNext">Next</button>
+      <br/>
       <h1 v-if="loading">Loading...</h1>
       <img v-if="!loading" :src="image"/>
-      <br/>
-      <button class="pure-button" :disabled="this.loading" v-on:click="getPrev">Prev</button>
-      <button class="pure-button pure-button-primary" :disabled="this.loading" v-on:click="getNext">Next</button>
     </div>
     <div v-else>
       <p>Load an image to get started</p>
@@ -51,6 +52,13 @@ export default {
     },
     getPrev() {
       this.getImage(this.prev)
+    },
+    getRecent() {
+      window.fetch('http://localhost:12345/recent')
+      .then(res => res.json())
+      .then(res => {
+        this.getImage(res.recent)
+      })
     }
   }
 }
