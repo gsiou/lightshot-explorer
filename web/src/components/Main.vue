@@ -1,16 +1,11 @@
 <template>
   <div>
-    <div v-if="img">
-      <button class="pure-button" :disabled="this.loading" v-on:click="getPrev">Prev</button>
-      <button class="pure-button" v-on:click="getRecent">Recent</button>
-      <button class="pure-button pure-button-primary" :disabled="this.loading" v-on:click="getNext">Next</button>
-      <br/>
-      <h1 v-if="loading">Loading...</h1>
-      <img v-if="!loading" :src="image"/>
-    </div>
-    <div v-else>
-      <p>Load an image to get started</p>
-    </div>
+    <button class="pure-button" :disabled="this.loading" v-on:click="getPrev">Prev</button>
+    <button class="pure-button" v-on:click="getRecent">Recent</button>
+    <button class="pure-button pure-button-primary" :disabled="this.loading" v-on:click="getNext">Next</button>
+    <br/>
+    <h1 v-if="loading">Loading...</h1>
+    <img v-if="!loading" :src="image"/>
   </div>
 </template>
 
@@ -31,6 +26,8 @@ export default {
   mounted () {
     if (this.img) {
       this.getImage(this.img)
+    } else {
+      this.getRecent()
     }
   },
   methods: {
